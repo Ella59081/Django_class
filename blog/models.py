@@ -46,6 +46,12 @@ class Post(TimeStampedModel):
         related_name="posts"
     )
     
+    image_preview = models.ImageField(
+        upload_to='posts/',
+        blank=True,
+        null=True
+    )
+    
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
@@ -54,3 +60,47 @@ class Post(TimeStampedModel):
         
     def __str__(self):
         return self.name
+    
+    
+class Comment(TimeStampedModel):
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="comments"
+    )
+    
+    body = models.TextField()
+    
+    class Meta:
+        ordering = ['-createdAt']
+        
+    def __str__(self):
+        return f'Comment by {self.author.username} on'
+        
+class Like(models.Model):
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='likes'
+    )
+    
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="likes"
+    )
+    
+    
+    class Meta:
+        unique_together = ('user', 'post')
+    
+        
+#assignment - ikenosuh@gmail.com, 
+# read and wite on meta class properties, 2pages each with google docs
+#read on views, api views and views set
