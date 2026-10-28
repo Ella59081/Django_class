@@ -10,3 +10,4 @@ pip install djangorestframework djangorestframework-simplejwt psycopg[binary] py
 Create the django project(config/project name) - django-admin startproject config .
 Create an app - python manage.py startapp {app name}
 Register app in config\settings.py, installed apps
+Run the app - python manage.py run server
